@@ -13,28 +13,27 @@ public class ServerGraphicConfig : BasePluginConfig
 public class ServerGraphic : BasePlugin, IPluginConfig<ServerGraphicConfig>
 {
     public override string ModuleName => "ServerGraphic";
-    public override string ModuleVersion => "1.0.1";
+    public override string ModuleVersion => "1.0.2";
     public override string ModuleAuthor => "unfortunate";
 
     public ServerGraphicConfig Config { get; set; } = new();
 
     public void OnConfigParsed(ServerGraphicConfig config)
     {
+        Config = config;
         RegisterListener<Listeners.OnTick>(() =>
         {
             foreach (var player in Utilities.GetPlayers())
             {
                 if (!IsPlayerValid(player))
-                    return;
+                    continue;
 
                 if (player.PawnIsAlive)
-                    return;
-    
-                player.PrintToCenterHtml($"<img src='{config.Image}'>");
+                    continue;
+
+                player.PrintToCenterHtml($"<img src='{Config.Image}'>");
             }
         });
-
-        Config = config;
     }
 
     #region Helpers
